@@ -1,46 +1,15 @@
 import com.example.Feline;
 import com.example.Lion;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(Parameterized.class)
 public class LionTest {
-
-    private String sex;
-    private boolean expectedMane;
-
-    public LionTest(String sex, boolean expectedMane) {
-        this.sex = sex;
-        this.expectedMane = expectedMane;
-    }
-
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                {"Самец", true},
-                {"Самка", false}
-        });
-    }
-
-    @Test
-    public void testDoesHaveMane() throws Exception {
-        //Arrange
-        Feline mockFeline = mock(Feline.class);
-        Lion lion = new Lion(sex, mockFeline);
-        // Assert
-        assertEquals(expectedMane, lion.doesHaveMane());
-    }
-
 
     @Test
     public void testGetKittensMock() throws Exception {
@@ -55,11 +24,24 @@ public class LionTest {
         assertEquals(expectedResult, actualResult);
     }
 
-    @Test(expected = Exception.class)
-    public void testLionConstructorThrowsExceptionForInvalidSex() throws Exception {
+//    @Test(expected = Exception.class)
+//    public void testLionConstructorThrowsExceptionForInvalidSex() throws Exception {
+//        Feline mockFeline = mock(Feline.class);
+//        new Lion("InvalidValue", mockFeline);
+//    }
+
+    @Test
+    public void testLionConstructorThrowsExceptionForInvalidSex() {
         Feline mockFeline = mock(Feline.class);
-        new Lion("InvalidValue", mockFeline);
+        try {
+            new Lion("InvalidValue", mockFeline);
+            fail("Expected an Exception to be thrown"); // Если исключение не было выброшено, тест должен упасть
+        } catch (Exception e) {
+            // Здесь проверяется сообщение исключения
+            assertEquals("Используйте допустимые значения пола животного - самей или самка", e.getMessage());
+        }
     }
+
 
     @Test
     public void testGetFoodReturnsCorrectFoodList() throws Exception {

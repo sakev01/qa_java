@@ -4,6 +4,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class FelineTest {
 
@@ -45,12 +46,19 @@ public class FelineTest {
         // Assert
         assertEquals(expectedKittensCount, actualKittensCount);
     }
-    @Test(expected = Exception.class)
-    public void testGetFoodThrowsExceptionForUnknownAnimalKind() throws Exception {
+    @Test
+    public void testGetFoodThrowsExceptionForUnknownAnimalKind() {
         // Arrange
         Feline feline = new Feline();
+        String expectedExceptionMessage = "Неизвестный вид животного, используйте значение Травоядное или Хищник";
 
-        // Act
-        feline.getFood("Unknown");
-    }
-}
+        try {
+            // Act
+            feline.getFood("Unknown");
+            fail("Expected an Exception to be thrown");
+        } catch (Exception exception) {
+            // Assert
+            String actualExceptionMessage = exception.getMessage();
+            assertEquals(expectedExceptionMessage, actualExceptionMessage);
+        }
+}}
